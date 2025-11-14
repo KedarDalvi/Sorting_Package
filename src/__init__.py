@@ -1,11 +1,2 @@
-"""Package initializer for Sorting_Package src."""
-
-__all__ = [
-    "base",
-    "bubble",
-    "selection",
-    "merge",
-    "quick",
-    "factory",
-    "shell",
-]
+# empty or version
+__all__ = ["base", "bubble", "selection", "merge", "quick", "factory"]

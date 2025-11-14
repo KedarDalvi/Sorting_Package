@@ -1,44 +1,38 @@
-"""Iterative QuickSort implementation with randomized pivot."""
-
 import random
-from typing import List
 from .base import Sorter
 
-
 class QuickSort(Sorter):
-    """Iterative quicksort using randomized pivot selection."""
-
-    def sort(self, data: List[int]) -> List[int]:
-        """Return a new sorted list (ascending or descending)."""
+    def sort(self, data):
         self.validate(data)
-        arr = data[:]
+        arr = data[:]  # copy
         n = len(arr)
         if n <= 1:
             return arr
 
+        # iterative quicksort with randomized pivot to avoid worst-case recursion
         stack = [(0, n - 1)]
-        comparator = (lambda a, b: a < b) if self.ascending else (lambda a, b: a > b)
+        comp = (lambda a, b: a < b) if self.ascending else (lambda a, b: a > b)
 
         while stack:
             low, high = stack.pop()
             if low >= high:
                 continue
 
+            # partition
             pivot_idx = random.randint(low, high)
-            pivot_value = arr[pivot_idx]
+            pivot = arr[pivot_idx]
+            # move pivot to end
             arr[pivot_idx], arr[high] = arr[high], arr[pivot_idx]
             store = low
-            for index in range(low, high):
-                if comparator(arr[index], pivot_value) or (
-                    arr[index] == pivot_value and self.ascending
-                ):
-                    arr[store], arr[index] = arr[index], arr[store]
+            for i in range(low, high):
+                # if arr[i] should be on left side
+                if comp(arr[i], pivot) or arr[i] == pivot and self.ascending:  # stable-ish
+                    arr[store], arr[i] = arr[i], arr[store]
                     store += 1
+            # move pivot to its store position
             arr[store], arr[high] = arr[high], arr[store]
-
-            left_size = store - 1 - low
-            right_size = high - (store + 1)
-            if left_size > right_size:
+            # push subarrays
+            if store - 1 - low > high - (store + 1):
                 if low < store - 1:
                     stack.append((low, store - 1))
                 if store + 1 < high:

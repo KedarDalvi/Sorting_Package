@@ -1,0 +1,17 @@
+# Python / environment
+__pycache__/
+*.py[cod]
+*.pyo
+env/
+venv/
+*.egg-info/
+dist/
+build/
+.Python
+.idea/
+.vscode/
+pytest_cache/
+reports/*.html
+reports/coverage.xml
+# Mac
+.DS_Store

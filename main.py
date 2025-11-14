@@ -3,13 +3,13 @@
 Usage:
     python main.py input.txt
 
-Input file format (4+ lines):
+Input file format (4 lines):
 1) algorithm_name  (bubble | selection | merge | quick)
 2) order           (asc | desc)
 3) size            (integer)
-4+) elements       (space separated integers) -- can be on one or multiple lines
+4) elements        (space separated integers)
 
-Example file:
+Example:
 merge
 asc
 5
@@ -27,6 +27,8 @@ def parse_input_file(path):
     algo = lines[0]
     order = lines[1].lower()
     size = int(lines[2])
+    elems = []
+    # support space separated ints potentially over multiple remaining lines
     rest = " ".join(lines[3:])
     elems = [int(x) for x in rest.split()]
     if len(elems) != size:
@@ -42,6 +44,7 @@ def main():
     ascending = True if order in ("asc", "ascending", "a") else False
     sorter = SorterFactory.get_sorter(algo, ascending=ascending)
     sorted_list = sorter.sort(elems)
+    # print space-separated sorted list -> easily redirected
     print(" ".join(str(x) for x in sorted_list))
 
 if __name__ == "__main__":
