@@ -16,3 +16,4 @@ reports/coverage.xml
 # Mac
 .DS_Store
 .coverage
+.coverage
