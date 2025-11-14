@@ -1,17 +1,23 @@
+"""Iterative QuickSort implementation with randomized pivot."""
+
 import random
+from typing import List
 from .base import Sorter
 
+
 class QuickSort(Sorter):
-    def sort(self, data):
+    """Iterative quicksort using randomized pivot selection."""
+
+    def sort(self, data: List[int]) -> List[int]:
+        """Return a new sorted list (ascending or descending)."""
         self.validate(data)
-        arr = data[:]  # copy
+        arr = data[:]
         n = len(arr)
         if n <= 1:
             return arr
 
-        # iterative quicksort with randomized pivot
         stack = [(0, n - 1)]
-        comp = (lambda a, b: a < b) if self.ascending else (lambda a, b: a > b)
+        comparator = (lambda a, b: a < b) if self.ascending else (lambda a, b: a > b)
 
         while stack:
             low, high = stack.pop()
@@ -19,17 +25,20 @@ class QuickSort(Sorter):
                 continue
 
             pivot_idx = random.randint(low, high)
-            pivot = arr[pivot_idx]
+            pivot_value = arr[pivot_idx]
             arr[pivot_idx], arr[high] = arr[high], arr[pivot_idx]
             store = low
-            for i in range(low, high):
-                if comp(arr[i], pivot) or (arr[i] == pivot and self.ascending):
-                    arr[store], arr[i] = arr[i], arr[store]
+            for index in range(low, high):
+                if comparator(arr[index], pivot_value) or (
+                    arr[index] == pivot_value and self.ascending
+                ):
+                    arr[store], arr[index] = arr[index], arr[store]
                     store += 1
             arr[store], arr[high] = arr[high], arr[store]
 
-            # push smaller range first to limit stack size
-            if (store - 1 - low) > (high - (store + 1)):
+            left_size = store - 1 - low
+            right_size = high - (store + 1)
+            if left_size > right_size:
                 if low < store - 1:
                     stack.append((low, store - 1))
                 if store + 1 < high:

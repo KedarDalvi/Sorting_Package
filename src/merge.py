@@ -1,38 +1,50 @@
+"""Iterative bottom-up MergeSort implementation."""
+
+from typing import List
 from .base import Sorter
 
+
 class MergeSort(Sorter):
-    def sort(self, data):
+    """Iterative merge sort to avoid recursion depth issues."""
+
+    def sort(self, data: List[int]) -> List[int]:
+        """Return a new sorted list (ascending or descending)."""
         self.validate(data)
-        arr = data[:]  # copy
+        arr = data[:]
         n = len(arr)
         if n <= 1:
             return arr
 
-        # bottom-up iterative merge sort to avoid recursion limits
         width = 1
         while width < n:
             left = 0
             while left < n:
                 mid = min(left + width, n)
                 right = min(left + 2 * width, n)
-                l, r = left, mid
-                merged = []
-                while l < mid and r < right:
+                left_idx, right_idx = left, mid
+                merged: List[int] = []
+                while left_idx < mid and right_idx < right:
                     if self.ascending:
-                        if arr[l] <= arr[r]:
-                            merged.append(arr[l]); l += 1
+                        if arr[left_idx] <= arr[right_idx]:
+                            merged.append(arr[left_idx])
+                            left_idx += 1
                         else:
-                            merged.append(arr[r]); r += 1
+                            merged.append(arr[right_idx])
+                            right_idx += 1
                     else:
-                        if arr[l] >= arr[r]:
-                            merged.append(arr[l]); l += 1
+                        if arr[left_idx] >= arr[right_idx]:
+                            merged.append(arr[left_idx])
+                            left_idx += 1
                         else:
-                            merged.append(arr[r]); r += 1
-                while l < mid:
-                    merged.append(arr[l]); l += 1
-                while r < right:
-                    merged.append(arr[r]); r += 1
-                arr[left:left+len(merged)] = merged
+                            merged.append(arr[right_idx])
+                            right_idx += 1
+                while left_idx < mid:
+                    merged.append(arr[left_idx])
+                    left_idx += 1
+                while right_idx < right:
+                    merged.append(arr[right_idx])
+                    right_idx += 1
+                arr[left:left + len(merged)] = merged
                 left += 2 * width
             width *= 2
         return arr
