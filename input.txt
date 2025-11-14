@@ -1,4 +1,4 @@
-merge
+selection
 desc
 6
 5 1 9 0 -3 123
